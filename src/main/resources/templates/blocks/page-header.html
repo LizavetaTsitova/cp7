@@ -1,0 +1,20 @@
+<div th:fragment="header" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <div class="container" style="background-color: white;">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-1 mb-4 border-bottom">
+            <div class="col-md-3 mb-2 mb-md-0">
+                <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+                    <img src="/images/logo_2.png" alt="Logo" height="40" width="40">
+                </a>
+            </div>
+            <div class="col-md-3 text-end" sec:authorize="isAnonymous()">
+                <a role="button" class="btn btn-primary" href="/login">Войти</a>
+                <a role="button" class="btn btn-outline-primary me-2" href="/reg">Зарегистрироваться</a>
+            </div>
+            <div class="col-md-3 text-end" sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn btn-outline-primary me-2">Выход</button>
+                </form>
+            </div>
+        </header>
+    </div>
+</div>
