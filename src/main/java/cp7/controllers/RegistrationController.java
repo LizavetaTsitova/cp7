@@ -63,4 +63,9 @@ public class RegistrationController {
 
         return "redirect:/login";
     }
+
+    @GetMapping("/company_registration")
+    public String regCompany(){
+        return "redirect:/";
+    }
 }

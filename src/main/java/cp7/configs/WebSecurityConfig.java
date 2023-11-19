@@ -23,11 +23,13 @@ public class WebSecurityConfig {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/reg", "/registration/**", "/static/**", "/static/images/**").permitAll()
+                        .requestMatchers("/", "/reg", "/registration/**", "/static/**", "/static/images/**", "/static/styles/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -37,6 +39,7 @@ public class WebSecurityConfig {
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll().logoutSuccessUrl("/"));
+
 
         return http.build();
     }

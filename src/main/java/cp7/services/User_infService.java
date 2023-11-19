@@ -1,6 +1,5 @@
 package cp7.services;
 
-import cp7.entities.Users;
 import cp7.entities.Users_inf;
 import cp7.repositories.User_infRepository;
 import lombok.RequiredArgsConstructor;
