@@ -55,7 +55,7 @@ public class RegistrationController {
             return "registration";
         }
 
-        user_inf.setUser_id(user.getUser_id());
+        user_inf.setUserId(user.getUser_id());
         if(String.valueOf(user.getRole()).contains("PERSONAL")){
             user_inf.setId_company(null);
         }

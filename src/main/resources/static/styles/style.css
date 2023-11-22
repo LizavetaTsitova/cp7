@@ -60,12 +60,7 @@
 }
 
 .sidebar.active {
-    left: 0;
-}
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 92%;
+    left: 0px;
 }
 
 .sidebar ul {
@@ -90,4 +85,5 @@ footer {
     background-color: #4CAF50;
     color: #fff;
 }
+
 

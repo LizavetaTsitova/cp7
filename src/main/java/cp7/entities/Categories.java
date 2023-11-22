@@ -5,18 +5,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @Entity
-@Table(name = "companies")
+@Table(name = "categories")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Companies {
+public class Categories {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_company;
+    private Integer category_id;
 
+    @Column(name = "company_id")
+    private Integer companyId;
+    private Integer user_id;
+    private Date paym_date;
     private String name;
-    private String email;
-    private Boolean status;
+    private Integer type;
 }
-

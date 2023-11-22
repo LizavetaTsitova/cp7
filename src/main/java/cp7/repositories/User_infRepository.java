@@ -4,4 +4,5 @@ import cp7.entities.Users_inf;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface User_infRepository extends JpaRepository<Users_inf, Integer> {
+    Users_inf findByUserId(Integer id);
 }
