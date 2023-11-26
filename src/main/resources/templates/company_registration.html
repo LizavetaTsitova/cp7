@@ -27,9 +27,12 @@
             method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingFirstName" placeholder="Имя"
-                 name="first_name" required style="height: 53px;">
-          <label for="floatingFirstName">Компания</label>
+          <input type="text" class="form-control" id="floatingName" placeholder="Название компании"
+                 name="name" required style="height: 53px;">
+          <label for="floatingName">Компания</label>
+        </div>
+        <div th:if="${errorMessage}" class="text-danger" style="font-size: smaller;">
+          <p th:text="${errorMessage}"></p>
         </div>
         <div class="form-floating mb-3">
           <input type="email" class="form-control form-control-sm" id="floatingInput" placeholder="Email" name="email"

@@ -29,14 +29,6 @@
             }
         }
     </script>
-
-    <style>
-        #additionalButtons {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
-        }
-    </style>
 </head>
 <body>
 <header th:insert="~{blocks/page-header :: header}"></header>
@@ -86,7 +78,7 @@
                         </select>
                         <label for="floatingCompany">Компания</label>
                     </div>
-                    <div style="text-align: center;"><a href="company_registration.html" style="font-size: smaller">Вашей компании нет в этом списке?</a></div>
+                    <div style="text-align: center;"><a href="/comp_reg" style="font-size: smaller">Вашей компании нет в этом списке?</a></div>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary" type="submit" style="margin-top: 15px;">
                     Зарегистрироваться

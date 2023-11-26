@@ -5,19 +5,18 @@ import cp7.entities.Users;
 import cp7.entities.Users_inf;
 import cp7.entities.enums.Role;
 import cp7.repositories.CompanyRepository;
-import cp7.repositories.UserRepository;
 import cp7.repositories.User_infRepository;
+import cp7.services.CompanyService;
 import cp7.services.UserService;
-import cp7.services.User_infService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -28,11 +27,13 @@ public class RegistrationController {
     CompanyRepository companyRepository;
     @Autowired
     User_infRepository user_infRepository;
+    @Autowired
+    CompanyService companyService;
 
 
     @GetMapping("/reg")
     public String openRegForm(Model model) {
-        List<Companies> companies = companyRepository.findAll();
+        List<Companies> companies = companyRepository.findAllByStatus(true);
 
         model.addAttribute("companies", companies);
         return "registration";
@@ -57,15 +58,33 @@ public class RegistrationController {
 
         user_inf.setUserId(user.getUser_id());
         if(String.valueOf(user.getRole()).contains("PERSONAL")){
-            user_inf.setId_company(null);
+            user_inf.setIdCompany(null);
         }
         user_infRepository.save(user_inf);
 
         return "redirect:/login";
     }
 
-    @GetMapping("/company_registration")
-    public String regCompany(){
-        return "redirect:/";
+    @PostMapping("/company_registration")
+    public String regCompany(Model model, @ModelAttribute Companies company){
+        if (!companyService.registerCompany(company)) {
+            model.addAttribute("errorMessage", "Компания с email: " + company.getEmail() +
+                    " уже существует");
+            return "company_registration";
+        }
+        return "confirmation_waiting";
+    }
+
+    @GetMapping("/activation/{code}")
+    public String activate(Model model, @PathVariable String code){
+        boolean isActivated = companyService.activateCompany(code);
+
+        if (isActivated) {
+            model.addAttribute("message", "Ваша компания успешно подтверждена!");
+        } else {
+            model.addAttribute("message", "Эта почта уже прошла валидацию");
+        }
+
+        return "confirmation_waiting";
     }
 }

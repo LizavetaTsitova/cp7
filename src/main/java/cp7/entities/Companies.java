@@ -18,5 +18,7 @@ public class Companies {
     private String name;
     private String email;
     private Boolean status;
+    @Column(name = "activation_code")
+    private String activationCode;
 }
 

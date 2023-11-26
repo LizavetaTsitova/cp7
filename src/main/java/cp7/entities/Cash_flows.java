@@ -17,11 +17,13 @@ public class Cash_flows {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer flow_id;
 
-    private String flow_type_1;
-    private String flow_type_2;
+    @Column(name = "flow_type_1")
+    private Boolean flowType1;
+    private Boolean flow_type_2;
     @Column(name = "cal_id")
     private Integer calId;
     private Date paym_date;
     private Float amount;
-    private Integer category_id;
+    @Column(name = "category_id")
+    private Integer categoryId;
 }

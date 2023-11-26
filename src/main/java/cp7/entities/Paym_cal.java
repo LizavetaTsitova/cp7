@@ -17,8 +17,10 @@ public class Paym_cal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cal_id;
 
-    private Date start_date;
-    private Date end_date;
+    @Column(name = "start_date")
+    private Date startDate;
+    @Column(name = "end_date")
+    private Date endDate;
     @Column(name = "id_company")
     private Integer idCompany;
     @Column(name = "owner_id")

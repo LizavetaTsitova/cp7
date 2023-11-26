@@ -23,13 +23,12 @@ public class WebSecurityConfig {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/reg", "/registration/**", "/static/**", "/static/images/**", "/static/styles/**").permitAll()
+                        .requestMatchers("/", "/reg", "/registration/**","/company_registration", "/static/**", "/static/images/**", "/static/styles/**", "/comp_reg", "/activation/*").permitAll()
+                        .requestMatchers("/add_pc", "/pc/cal_date").hasAnyRole("OWNER", "PERSONAL")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
