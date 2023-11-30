@@ -112,6 +112,7 @@ public class PCController {
 
         if (cal_id == null) {
             model.addAttribute("errorMessage", "Платёжных календарей не найдено");
+            model.addAttribute("usersInfs", usersInfs);
             return "payment_calendar";
         }
 

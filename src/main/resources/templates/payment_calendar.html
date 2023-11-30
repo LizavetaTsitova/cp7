@@ -126,25 +126,24 @@
     </div>
 
     <!-- Таблицы -->
+    <div class="container">
+        <h2>Платёжный календарь</h2>
+        <form th:action="@{/pc/cal_date}" method="get">
+            <div>
+                <label for="cal_date">Выберите месяц:</label>
+                <input type="month" id="cal_date" name="cal_date" class="date">
+            </div>
+            <div>
+                <button>Выбрать</button>
+            </div>
+        </form>
 
-    <div th:if="${errorMessage}" class="text-danger" style="font-size: smaller;">
-        <p th:text="${errorMessage}"></p>
-    </div>
+        <div th:if="${errorMessage}" class="text-danger" style="font-size: smaller;">
+            <p th:text="${errorMessage}"></p>
+        </div>
 
-    <div th:unless="${errorMessage}">
-        <div class="container">
-            <h2>Платёжный календарь</h2>
+        <div th:unless="${errorMessage}">
             <h4>Ответственный: <span th:text="${owner}"></span></h4>
-            <form th:action="@{/pc/cal_date}" method="get">
-                <div>
-                    <label for="cal_date">Выберите месяц:</label>
-                    <input type="month" id="cal_date" name="cal_date" class="date">
-                </div>
-                <div>
-                    <button>Выбрать</button>
-                </div>
-            </form>
-
             <hr>
 
             <h2>Таблица доходов</h2>
@@ -238,8 +237,8 @@
     <div class="popup-content">
         <span class="close" onclick="closePopupForm()">&times;</span>
         <h3>Заполните форму для создания нового платёжного календаря</h3>
-        <div th:if="${errorMessage}" class="text-danger" style="font-size: smaller;">
-            <p th:text="${errorMessage}"></p>
+        <div th:if="${save_error}" class="text-danger" style="font-size: smaller;">
+            <p th:text="${save_error}"></p>
         </div>
         <form th:action="@{/add_pc}">
             <!-- Поля для заполнения -->
@@ -268,7 +267,7 @@
 
 <script th:inline="javascript">
     /* Отображение всплывающего окна с сообщением об ошибке */
-    var save_error =[[${save_error}]];
+    var save_error = [[${save_error}]];
     if (save_error) {
         alert(save_error);
     }
