@@ -63,8 +63,8 @@
                 <div class="mb-3">
                     <label for="userRole" class="form-label">Выберите роль:</label>
                     <select class="form-select" id="userRole" name="userRole" onchange="toggleButtons()">
-                        <option value="ROLE_PERSONAL" ${user.roles?seq_contains(role)?string(
-                        "selected","")}>Для личного пользования</option>
+<!--                        <option value="ROLE_PERSONAL" ${user.roles?seq_contains(role)?string(-->
+                        <!--                        "selected","")}>Для личного пользования</option>-->
                         <option value="ROLE_OWNER" ${user.roles?seq_contains(role)?string(
                         "selected","")}>Финансист</option>
                         <option value="ROLE_INFORMER" ${user.rolesseq_contains(role)?string("selected","")}>Руководитель отдела</option>

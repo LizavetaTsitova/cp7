@@ -33,14 +33,14 @@
     letter-spacing: 1rem;
 }
 
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Здесь можно настроить уровень прозрачности (от 0 до 1) */
-}
+/*.overlay {*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    background-color: rgba(0, 0, 0, 0.5); !* Здесь можно настроить уровень прозрачности (от 0 до 1) *!*/
+/*}*/
 
 ::-webkit-scrollbar {
     width: 0.5em;
@@ -52,14 +52,14 @@
 }
 
 /* CSS to animate the sidebar */
-.sidebar {
-    width: 220px;
-    position: fixed;
-    top: 40px;
-    left: 0;
-    height: 100vh;
-    z-index: 999;
-}
+/*.sidebar {*/
+/*    width: 220px;*/
+/*    position: fixed;*/
+/*    top: 40px;*/
+/*    left: 0;*/
+/*    height: 100vh;*/
+/*    z-index: 999;*/
+/*}*/
 
 /*.sidebar.active {*/
 /*    left: 0px;*/
@@ -116,9 +116,35 @@
     cursor: pointer;
 }
 
-#additionalButtons {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease-in-out;
+/*#additionalButtons {*/
+/*    max-height: 0;*/
+/*    overflow: hidden;*/
+/*    transition: max-height 0.5s ease-in-out;*/
+/*}*/
+
+.content-container-pc {
+    display: flex;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 190px;
+    margin-right: 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+}
+
+.tables-container-pc {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow-x: auto;
+}
+
+.table-wrapper-pc {
+    flex: 1;
+    margin-right: 10px;
 }
 
