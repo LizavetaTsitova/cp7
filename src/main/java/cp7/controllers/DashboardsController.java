@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class DashboardsController {
-    @GetMapping("/ra")
+    @GetMapping("/dashboards")
     public String onenPC() {
-        return "ra";
+        return "dashboards";
     }
 }

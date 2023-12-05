@@ -1,0 +1,22 @@
+<header class="mb-3 border-bottom" style="height: 40px; background-color: #2F3337">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <section style="margin-right: 10px">
+                <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+                    <img src="/static/images/logo_2_white.png" alt="Logo" height="25" width="25">
+                </a>
+            </section>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li class="nav-item"><a href="/pc" class="nav-link px-2 link-secondary"
+                                        style="color: white; text-decoration: none">Платёжный календарь</a></li>
+                <li class="nav-item"><a href="/dashboards" class="nav-link px-2 link-body-emphasis"
+                                        style="color: white; text-decoration: none"
+                                        th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}">Дашборды</a>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 link-body-emphasis"
+                                        style="color: white; text-decoration: none">Платежи</a></li>
+            </ul>
+        </div>
+    </div>
+</header>

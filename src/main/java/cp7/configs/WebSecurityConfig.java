@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -28,7 +29,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/reg", "/registration/**","/company_registration", "/static/**", "/static/images/**", "/static/styles/**", "/comp_reg", "/activation/*").permitAll()
-                        .requestMatchers("/add_pc", "/pc/cal_date").hasAnyRole("OWNER", "PERSONAL")
+                        .requestMatchers("/add_pc", "/pc/cal_date", "/dashboards").hasAnyRole("OWNER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -37,7 +38,10 @@ public class WebSecurityConfig {
                         .defaultSuccessUrl("/pc")
                         .permitAll()
                 )
-                .logout((logout) -> logout.permitAll().logoutSuccessUrl("/"));
+                .logout((logout) -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .permitAll()
+                        .logoutSuccessUrl("/"));
 
 
         return http.build();

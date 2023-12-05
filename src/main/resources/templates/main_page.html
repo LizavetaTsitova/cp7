@@ -20,38 +20,58 @@
 </head>
 <body>
 <!--<header th:insert="~{blocks/page-header :: header}"></header>-->
-<section class="bg-light py-4 overflow-auto">
+<section class="bg-custom-color py-4 overflow-auto">
     <div class="container text-center">
         <img src="/static/images/logo_2.png" alt="Logo" height="50" width="50" style="margin-top: 50px">
-        <div class="image-container" style="display: flex; align-items: center; justify-content: center; margin-top: 50px;">
-            <a role="button" href="/login" style="color: black; text-decoration: none; margin-right: 10px; margin-bottom: 10px">Вход</a>
-            <a role="button" href="/reg" style="color: black; text-decoration: none; margin-bottom: 10px">Регистрация</a>
+        <div class="image-container"
+             style="display: flex; align-items: center; justify-content: center; margin-top: 50px;"
+             sec:authorize="isAnonymous()">
+            <a role="button" href="/login"
+               style="color: black; text-decoration: none; margin-right: 10px; margin-bottom: 10px">Вход</a>
+            <a role="button" href="/reg"
+               style="color: black; text-decoration: none; margin-bottom: 10px">Регистрация</a>
+        </div>
+        <div class="image-container"
+             style="display: flex; align-items: center; justify-content: center; margin-top: 50px;"
+             sec:authorize="isAuthenticated()">
+            <a role="button" href="/logout"
+               style="color: black; text-decoration: none; margin-right: 10px; margin-bottom: 10px">Выход</a>
+            <a role="button" href="/pc"
+               style="color: black; text-decoration: none; margin-right: 10px; margin-bottom: 10px">Платёжный календарь</a>
         </div>
         <h1 class="header-title" style="margin-bottom: 50px">PAYCAL</h1>
-<!--        <p class="lead mb-4" style="margin-bottom: 30px">Время - деньги</p>-->
+        <!--        <p class="lead mb-4" style="margin-bottom: 30px">Время - деньги</p>-->
     </div>
 </section>
 <section>
     <div class="container" style="margin-right: 20px;">
         <div class="row">
             <div class="col-md-6" style="margin-top: 60px;">
-                <div class="image-container" style="display: flex; align-items: flex-start; justify-content: flex-start;">
-                    <img src="/static/images/2.jpg" alt="Left Image" style="width: 50%; object-fit: cover; border-radius: 10px;">
+                <div class="image-container"
+                     style="display: flex; align-items: flex-start; justify-content: flex-start;">
+                    <img src="/static/images/2.jpg" alt="Left Image"
+                         style="width: 50%; object-fit: cover; border-radius: 10px;">
                     <p style="margin-left: 10px; white-space: pre-line;">
-                        С PAYCAL вы можете настроить повторяющиеся платежи, установить напоминания и даже автоматически оплачивать счета.
+                        С PAYCAL вы можете настроить повторяющиеся платежи, установить напоминания и даже автоматически
+                        оплачивать счета.
                         Забудьте о рутинных задачах по оплате счетов и сосредоточьтесь на важных вещах в своей жизни.
-                        PAYCAL также предлагает удобную и интуитивно понятную платформу, на которой вы можете легко отслеживать и анализировать свои платежи.
+                        PAYCAL также предлагает удобную и интуитивно понятную платформу, на которой вы можете легко
+                        отслеживать и анализировать свои платежи.
                     </p>
                 </div>
             </div>
             <div class="col-md-6" style="margin-top: 400px; margin-bottom: 60px">
-                <div class="image-container" style="display: flex; align-items: flex-start; justify-content: flex-start;">
+                <div class="image-container"
+                     style="display: flex; align-items: flex-start; justify-content: flex-start;">
                     <p style="margin-right: 10px; white-space: pre-line; text-align: right;">
                         Одной из отличительных черт PAYCAL является его интеллектуальная система управления платежами.
-                        Приложение анализирует ваши финансовые данные и предлагает оптимальные стратегии оплаты, помогая вам избежать штрафов и минимизировать расходы.
-                        PAYCAL также предоставляет подробные отчеты и статистику, чтобы вы могли лучше понять свои финансовые привычки и принимать более осознанные решения.
+                        Приложение анализирует ваши финансовые данные и предлагает оптимальные стратегии оплаты, помогая
+                        вам избежать штрафов и минимизировать расходы.
+                        PAYCAL также предоставляет подробные отчеты и статистику, чтобы вы могли лучше понять свои
+                        финансовые привычки и принимать более осознанные решения.
                     </p>
-                    <img src="/static/images/3.jpg" alt="Right Image" style="width: 50%; object-fit: cover; border-radius: 10px;">
+                    <img src="/static/images/3.jpg" alt="Right Image"
+                         style="width: 50%; object-fit: cover; border-radius: 10px;">
                 </div>
             </div>
         </div>

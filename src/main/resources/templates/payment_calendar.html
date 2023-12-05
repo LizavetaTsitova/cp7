@@ -17,126 +17,23 @@
     <link rel="stylesheet" href="../static/styles/style.css">
 
 </head>
-<body>
+<body style="background-color: #F1F0FA">
+<header th:insert="~{blocks/header :: header}"></header>
 <div class="content-container">
-    <!-- Button to toggle the sidebar -->
-    <button id="sidebarToggleBtn" class="btn btn-primary">
-        <img src="/static/images/menu.png" alt="Боковое меню"
-             style="width: 20px; height: 20px;display: block; margin: auto;">
-    </button>
-    <!-- Sidebar -->
-    <div class="sidebar d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary"
-         style="width: 280px; height: 95%; background-color: #EDEDED">
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-            <svg class="bi pe-none me-2" width="40" height="40">
-                <img src="/static/images/logo_2.png" width="40" height="40">
-            </svg>
-            <span class="fs-4 ms-2">PayCal</span>
-        </a>
-        <hr>
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/pc">
-                    <svg class="bi pe-none me-2" width="16" height="16">
-                        <use xlink:href="#PayCal"></use>
-                    </svg>
-                    Платёжный календарь
-                </a>
-            </li>
-            <li>
-            <li>
-                <a href="#" class="nav-link link-body-emphasis"
-                   th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')') or #authorization.expression('hasRole(''ROLE_PERSONAL'')')}"
-                   onclick="openPopupForm()">
-                    <svg class="bi pe-none me-2" width="16" height="16">
-                        <use xlink:href="#new_calendar"></use>
-                    </svg>
-                    Создать новый календарь
-                </a>
-            </li>
-            <li>
-                <a class="nav-link link-body-emphasis" href="/ra"
-                   th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')') or #authorization.expression('hasRole(''ROLE_PERSONAL'')')}">
-                    <svg class="bi pe-none me-2" width="16" height="16">
-                        <use xlink:href="#dashboards"></use>
-                    </svg>
-                    Дашборды
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link link-body-emphasis"
-                   th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')') or #authorization.expression('hasRole(''ROLE_PERSONAL'')')}">
-                    <svg class="bi pe-none me-2" width="16" height="16">
-                        <use xlink:href="#table"></use>
-                    </svg>
-                    Платежи
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link link-body-emphasis"
-                   th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')') or #authorization.expression('hasRole(''ROLE_PERSONAL'')')}">
-                    <svg class="bi pe-none me-2" width="16" height="16">
-                        <use xlink:href="#grid"></use>
-                    </svg>
-                    Категории
-                </a>
-            </li>
-            <li>
-                <button class="nav-link link-body-emphasis" onclick="handleButton1Click()"
-                        th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')') or #authorization.expression('hasRole(''ROLE_PERSONAL'')')}">
-                    <svg class="bi pe-none me-2" width="16" height="16">
-                        <use xlink:href="#expenses"></use>
-                    </svg>
-                    Внести данные по доходам
-                </button>
-            </li>
-            <li>
-                <button class="nav-link link-body-emphasis" onclick="handleButton2Click()"
-                        th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')') or #authorization.expression('hasRole(''ROLE_PERSONAL'')')}">
-                    <svg class="bi pe-none me-2" width="16" height="16">
-                        <use xlink:href="#income"></use>
-                    </svg>
-                    Внести данные по расходам
-                </button>
-            </li>
-
-        </ul>
-        <hr>
-        <div class="dropdown">
-            <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
-               data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                <strong>mdo</strong>
-            </a>
-            <ul class="dropdown-menu text-small shadow">
-                <!--                <li><a class="dropdown-item" href="#" th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}">Создать-->
-                <!--                    новый календарь</a></li>-->
-                <li><a class="dropdown-item" href="#">Настройки</a></li>
-                <li><a class="dropdown-item" href="#">Профиль</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="/logout" onclick="event.preventDefault();
-                        document.getElementById('logout-form').submit();">Выход</a></li>
-                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;">
-                    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-                </form>
-            </ul>
-        </div>
-    </div>
-
+    <div th:include="blocks/sidebar.html"></div>
     <!-- Таблицы -->
     <div class="container">
-        <h2>Платёжный календарь</h2>
-        <form th:action="@{/pc/cal_date}" method="get">
-            <div>
+        <!--        <h2>Платёжный календарь</h2>-->
+        <form th:action="@{/pc/cal_date}" method="get" style="display: flex;">
+            <div style="margin-right: 10px;">
                 <label for="cal_date">Выберите месяц:</label>
                 <input type="month" id="cal_date" name="cal_date" class="date">
             </div>
             <div>
-                <button>Выбрать</button>
+                <button class="btn btn-primary">Выбрать</button>
             </div>
         </form>
+        <button id="editButton" onclick="toggleEditing()" class="btn btn-primary" style="margin-bottom: 10px; margin-top: 10px">Разрешить редактирование</button>
 
         <div th:if="${errorMessage}" class="text-danger" style="font-size: smaller;">
             <p th:text="${errorMessage}"></p>
@@ -146,90 +43,96 @@
             <h4>Ответственный: <span th:text="${owner}"></span></h4>
             <hr>
 
-            <h2>Таблица доходов</h2>
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>№</th>
-                    <th>Категории доходов</th>
-                    <th>План, сумма</th>
-                    <th>Факт, сумма</th>
-                    <th>Разница</th>
-                    <th th:each="day : ${#numbers.sequence(1, days)}"
-                        th:style="${weekend.contains(day) ? 'background-color: #9E1EC8' : ''}" th:text="${day}"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="category, index : ${categories_inc}">
-                    <td th:text="${index.index + 1}"></td>
-                    <!-- Заполняем колонку "N" по номеру каждой категории по счету -->
-                    <td th:text="${category.name}"></td> <!-- Выводим данные из переменной category_inc -->
-                    <td th:text="${planAmounts_inc[category.category_id]}"></td>
-                    <td th:text="${factAmounts_inc[category.category_id]}"></td>
-                    <td th:text="${planAmounts_inc[category.category_id] - factAmounts_inc[category.category_id]}"></td>
-                    <td th:each="day : ${#numbers.sequence(1, days)}">
+            <div style="background-color: white; padding: 10px; margin: -10px; margin-bottom: 15px; margin-top: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); overflow-x: auto;">
+                <h2>Таблица доходов</h2>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Категории доходов</th>
+                        <th>План, сумма</th>
+                        <th>Факт, сумма</th>
+                        <th>Разница</th>
+                        <th th:each="day : ${#numbers.sequence(1, days)}"
+                            th:style="${weekend.contains(day) ? 'background-color: #C6C2EB' : ''}"
+                            th:text="${day}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="category, index : ${categories_inc}">
+                        <td th:text="${index.index + 1}"></td>
+                        <td th:text="${category.name}"></td>
+                        <td th:text="${planAmounts_inc[category.category_id]}"></td>
+                        <td th:text="${factAmounts_inc[category.category_id]}"></td>
+                        <td th:text="${planAmounts_inc[category.category_id] - factAmounts_inc[category.category_id]}"></td>
+                        <td th:each="day : ${#numbers.sequence(1, days)}">
                     <span th:if="${paymentByDay_inc[category.category_id]?.get(day) != null}"
-                          th:text="${paymentByDay_inc[category.category_id].get(day)}"></span>
-                        <span th:unless="${paymentByDay_inc[category.category_id]?.get(day) != null}"> </span>
-                    </td>
-                </tr>
-                </tbody>
-                <tfoot>
-                <th colspan="50">ИТОГИ</th>
-                <tr>
-                    <td colspan="5">Итого по неделям</td>
-                    <td th:each="week, index : ${weeklyFactAmounts_inc}" th:text="${week}"></td>
-                </tr>
-                <tr>
-                    <td colspan="5">Общий итог</td>
-                    <td colspan="30" th:text="${totalFactAmount_inc}"></td>
-                </tr>
-                </tfoot>
-            </table>
+                          th:text="${paymentByDay_inc[category.category_id].get(day)}"
+                          class="editable-cell"></span>
+                            <span th:unless="${paymentByDay_inc[category.category_id]?.get(day) != null}"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <th colspan="50">ИТОГИ</th>
+                    <tr>
+                        <td colspan="5">Итого по неделям</td>
+                        <td th:each="week, index : ${weeklyFactAmounts_inc}" th:text="${week}"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">Общий итог</td>
+                        <td colspan="30" th:text="${totalFactAmount_inc}"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
 
             <hr>
 
-            <h2>Таблица расходов</h2>
+            <div style="background-color: white; padding: 10px; margin: -10px; margin-top: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); overflow-x: auto;">
+                <h2>Таблица расходов</h2>
 
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>№</th>
-                    <th>Категории расходов</th>
-                    <th>План, сумма</th>
-                    <th>Факт, сумма</th>
-                    <th>Разница</th>
-                    <th th:each="day : ${#numbers.sequence(1, days)}"
-                        th:style="${weekend.contains(day) ? 'background-color: #9E1EC8' : ''}" th:text="${day}"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="category, index : ${categories_dec}">
-                    <td th:text="${index.index + 1}"></td>
-                    <!-- Заполняем колонку "N" по номеру каждой категории по счету -->
-                    <td th:text="${category.name}"></td> <!-- Выводим данные из переменной category_inc -->
-                    <td th:text="${planAmounts_dec[category.category_id]}"></td>
-                    <td th:text="${factAmounts_dec[category.category_id]}"></td>
-                    <td th:text="${planAmounts_dec[category.category_id] - factAmounts_dec[category.category_id]}"></td>
-                    <td th:each="day : ${#numbers.sequence(1, days)}">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Категории расходов</th>
+                        <th>План, сумма</th>
+                        <th>Факт, сумма</th>
+                        <th>Разница</th>
+                        <th th:each="day : ${#numbers.sequence(1, days)}"
+                            th:style="${weekend.contains(day) ? 'background-color: #C6C2EB' : ''}"
+                            th:text="${day}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="category, index : ${categories_dec}">
+                        <td th:text="${index.index + 1}"></td>
+                        <!-- Заполняем колонку "N" по номеру каждой категории по счету -->
+                        <td th:text="${category.name}"></td> <!-- Выводим данные из переменной category_inc -->
+                        <td th:text="${planAmounts_dec[category.category_id]}"></td>
+                        <td th:text="${factAmounts_dec[category.category_id]}"></td>
+                        <td th:text="${planAmounts_dec[category.category_id] - factAmounts_dec[category.category_id]}"></td>
+                        <td th:each="day : ${#numbers.sequence(1, days)}" class="editable-cell">
                     <span th:if="${paymentByDay_dec[category.category_id]?.get(day) != null}"
                           th:text="${paymentByDay_dec[category.category_id].get(day)}"></span>
-                        <span th:unless="${paymentByDay_dec[category.category_id]?.get(day) != null}"> </span>
-                    </td>
-                </tr>
-                </tbody>
-                <tfoot>
-                <th colspan="50">ИТОГИ</th>
-                <tr>
-                    <td colspan="5">Итого по неделям</td>
-                    <td th:each="week, index : ${weeklyFactAmounts_dec}" th:text="${week}"></td>
-                </tr>
-                <tr>
-                    <td colspan="5">Общий итог</td>
-                    <td colspan="30" th:text="${totalFactAmount_dec}"></td>
-                </tr>
-                </tfoot>
-            </table>
+                            <span th:unless="${paymentByDay_dec[category.category_id]?.get(day) != null}"> </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <th colspan="50">ИТОГИ</th>
+                    <tr>
+                        <td colspan="5">Итого по неделям</td>
+                        <td th:each="week, index : ${weeklyFactAmounts_dec}" th:text="${week}"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">Общий итог</td>
+                        <td colspan="30" th:text="${totalFactAmount_dec}"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -282,28 +185,6 @@
     }
 </script>
 <script>
-    // JavaScript to toggle the sidebar
-    const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
-    const sidebar = document.querySelector('.sidebar');
-
-    sidebarToggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-    });
-</script>
-<script>
-    const menuItems = document.querySelectorAll('.sidebar li a');
-
-    menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-            // Удаляем класс 'active' у всех элементов меню
-            menuItems.forEach(item => item.classList.remove('active'));
-
-            // Добавляем класс 'active' к выбранному элементу меню
-            item.classList.add('active');
-        });
-    });
-</script>
-<script>
     $(function () {
         $("#datepicker").datepicker({
             dateFormat: "yy-mm",
@@ -338,5 +219,24 @@
     //document.getElementById('month').setAttribute('min', formattedNextMonth);
     document.getElementById('month').setAttribute('max', formattedNextMonth);
 </script>
+<script>
+    function toggleEditing() {
+        var editButton = document.getElementById("editButton");
+        var editableCells = document.getElementsByClassName("editable-cell");
+
+        if (editButton.innerText === "Разрешить редактирование") {
+            editButton.innerText = "Завершить редактирование";
+            for (var i = 0; i < editableCells.length; i++) {
+                editableCells[i].contentEditable = "true";
+            }
+        } else {
+            editButton.innerText = "Разрешить редактирование";
+            for (var i = 0; i < editableCells.length; i++) {
+                editableCells[i].contentEditable = "false";
+            }
+        }
+    }
+</script>
+
 </body>
 </html>

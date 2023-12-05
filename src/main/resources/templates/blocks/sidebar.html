@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- Button to toggle the sidebar -->
+<!--<button id="sidebarToggleBtn" class="btn btn-primary">-->
+<!--    <img src="/static/images/menu.png" alt="Боковое меню"-->
+<!--         style="width: 20px; height: 20px;display: block; margin: auto;">-->
+<!--</button>-->
+<!-- Sidebar -->
+<div class="sidebar d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary"
+     style="width: 220px; height: 95%; background-color: white">
+<!--    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">-->
+<!--        <svg class="bi pe-none me-2" width="40" height="40">-->
+<!--            <img src="/static/images/logo_2.png" width="40" height="40">-->
+<!--        </svg>-->
+<!--        <span class="fs-4 ms-2">PayCal</span>-->
+<!--    </a>-->
+<!--    <hr>-->
+    <h5>Панель управления</h5>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/pc">
+                <svg class="bi pe-none me-2" width="16" height="16">
+                    <use xlink:href="#PayCal"></use>
+                </svg>
+                Платёжный календарь
+            </a>
+        </li>
+        <li>
+        <li>
+            <a href="#" class="nav-link link-body-emphasis"
+               th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}"
+               onclick="openPopupForm()">
+                <svg class="bi pe-none me-2" width="16" height="16">
+                    <use xlink:href="#new_calendar"></use>
+                </svg>
+                Создать новый календарь
+            </a>
+        </li>
+        <li>
+            <a class="nav-link link-body-emphasis" href="/dashboards"
+               th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}">
+                <svg class="bi pe-none me-2" width="16" height="16">
+                    <use xlink:href="#dashboards"></use>
+                </svg>
+                Дашборды
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link link-body-emphasis"
+               th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}">
+                <svg class="bi pe-none me-2" width="16" height="16">
+                    <use xlink:href="#table"></use>
+                </svg>
+                Платежи
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link link-body-emphasis"
+               th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}">
+                <svg class="bi pe-none me-2" width="16" height="16">
+                    <use xlink:href="#grid"></use>
+                </svg>
+                Категории
+            </a>
+        </li>
+        <li>
+            <button class="nav-link link-body-emphasis" onclick="handleButton1Click()"
+                    th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')')}">
+                <svg class="bi pe-none me-2" width="16" height="16">
+                    <use xlink:href="#expenses"></use>
+                </svg>
+                Внести данные по доходам
+            </button>
+        </li>
+        <li>
+            <button class="nav-link link-body-emphasis" onclick="handleButton2Click()"
+                    th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')')}">
+                <svg class="bi pe-none me-2" width="16" height="16">
+                    <use xlink:href="#income"></use>
+                </svg>
+                Внести данные по расходам
+            </button>
+        </li>
+
+    </ul>
+    <hr>
+    <div class="dropdown">
+        <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
+           data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+            <strong>mdo</strong>
+        </a>
+        <ul class="dropdown-menu text-small shadow">
+            <!--                <li><a class="dropdown-item" href="#" th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}">Создать-->
+            <!--                    новый календарь</a></li>-->
+            <li><a class="dropdown-item" href="#">Настройки</a></li>
+            <li><a class="dropdown-item" href="#">Профиль</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/logout" onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">Выход</a></li>
+            <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+            </form>
+        </ul>
+    </div>
+</div>
+<!--<script>-->
+<!--    // JavaScript to toggle the sidebar-->
+<!--    const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');-->
+<!--    const sidebar = document.querySelector('.sidebar');-->
+
+<!--    sidebarToggleBtn.addEventListener('click', () => {-->
+<!--        sidebar.classList.toggle('active');-->
+<!--    });-->
+<!--</script>-->
+<!--<script>-->
+<!--    const menuItems = document.querySelectorAll('.sidebar li a');-->
+
+<!--    menuItems.forEach(item => {-->
+<!--        item.addEventListener('click', () => {-->
+<!--            // Удаляем класс 'active' у всех элементов меню-->
+<!--            menuItems.forEach(item => item.classList.remove('active'));-->
+
+<!--            // Добавляем класс 'active' к выбранному элементу меню-->
+<!--            item.classList.add('active');-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+</body>
+</html>

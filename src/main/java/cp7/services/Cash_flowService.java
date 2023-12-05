@@ -10,6 +10,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class Cash_flowService {
-    public void calculation(Map<Integer, Double> cash_flows) {
+    public void sumCalculation(Map<Integer, Double> cash_flows) {
+
     }
 }
