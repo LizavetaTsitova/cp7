@@ -5,6 +5,7 @@ import cp7.entities.enums.Role;
 import cp7.repositories.*;
 import cp7.services.Cash_flowService;
 import cp7.services.PCService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -50,7 +51,7 @@ public class PCController {
     private HttpSession httpSession;
 
     @GetMapping("/pc")
-    public String openPC(Model model) {
+    public String openPC(HttpServletRequest request, Model model) {
         LocalDate date = (LocalDate) httpSession.getAttribute("date");
         if (date == null) {
             date = LocalDate.now();
@@ -113,6 +114,8 @@ public class PCController {
         if (cal_id == null) {
             model.addAttribute("errorMessage", "Платёжных календарей не найдено");
             model.addAttribute("usersInfs", usersInfs);
+            model.addAttribute("request", request);
+            model.addAttribute("date", date);
             return "payment_calendar";
         }
 
@@ -261,6 +264,9 @@ public class PCController {
         for (double factAmount : factAmounts_dec.values()) {
             totalFactAmount_dec += factAmount;
         }
+
+        model.addAttribute("request", request);
+        model.addAttribute("date", date);
 
         model.addAttribute("weekend", weekend);
         model.addAttribute("days", days);

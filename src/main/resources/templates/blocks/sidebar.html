@@ -5,54 +5,58 @@
     <title>Title</title>
 </head>
 <body>
-<!-- Button to toggle the sidebar -->
-<!--<button id="sidebarToggleBtn" class="btn btn-primary">-->
-<!--    <img src="/static/images/menu.png" alt="Боковое меню"-->
-<!--         style="width: 20px; height: 20px;display: block; margin: auto;">-->
-<!--</button>-->
-<!-- Sidebar -->
 <div class="sidebar d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary"
      style="background-color: white">
     <h5>Панель управления</h5>
     <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
+    <ul class="nav nav-pills flex-column mb-auto" th:if="${request.requestURI.endsWith('/pc')}">
         <li>
             <a href="#" class="nav-link link-body-emphasis" style="color: black; text-decoration: none;"
                th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}"
                onclick="openPopupForm()">
-<!--                <svg class="bi pe-none me-2" width="16" height="16">-->
-<!--                    <use xlink:href="#new_calendar"></use>-->
-<!--                </svg>-->
                 Создать новый календарь
             </a>
         </li>
         <li>
             <a href="#" class="nav-link link-body-emphasis" style="color: black; text-decoration: none;"
                th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}">
-<!--                <svg class="bi pe-none me-2" width="16" height="16">-->
-<!--                    <use xlink:href="#grid"></use>-->
-<!--                </svg>-->
                 Категории
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link link-body-emphasis" style="color: black; text-decoration: none;"
+               th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}
+                 and ${#temporals.format(#temporals.createNow(), 'yyyy-MM') > #temporals.format(date, 'yyyy-MM')}
+                    and (${totalFactAmount_inc == 0.0} or ${totalFactAmount_dec == 0.0})">
+                Заполнить платёжный календарь
             </a>
         </li>
         <li>
             <button class="nav-link link-body-emphasis" onclick="handleButton1Click()"
                     style="color: black; text-decoration: none;"
-                    th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')')}">
-<!--                <svg class="bi pe-none me-2" width="16" height="16">-->
-<!--                    <use xlink:href="#expenses"></use>-->
-<!--                </svg>-->
+                    th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')')}
+                    and ${#temporals.format(#temporals.createNow(), 'yyyy-MM') < #temporals.format(date, 'yyyy-MM')}
+                    and (${totalFactAmount_inc == 0.0} or ${totalFactAmount_dec == 0.0})">
+                <!--                <svg class="bi pe-none me-2" width="16" height="16">-->
                 Внести данные по доходам
             </button>
         </li>
         <li>
             <button class="nav-link link-body-emphasis" onclick="handleButton2Click()"
                     style="color: black; text-decoration: none;"
-                    th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')')}">
-<!--                <svg class="bi pe-none me-2" width="16" height="16">-->
-<!--                    <use xlink:href="#income"></use>-->
-<!--                </svg>-->
+                    th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')')}
+                    and ${#temporals.format(#temporals.createNow(), 'yyyy-MM') < #temporals.format(date, 'yyyy-MM')}
+                    and (${totalFactAmount_inc == 0.0} or ${totalFactAmount_dec == 0.0})">
                 Внести данные по расходам
+            </button>
+        </li>
+
+    </ul>
+    <ul class="nav nav-pills flex-column mb-auto" th:if="${request.requestURI.endsWith('/dashboards')}">
+        <li>
+            <button class="nav-link link-body-emphasis" onclick="handleButton3Click()"
+                    style="color: black; text-decoration: none;">
+                Добавить дашборд
             </button>
         </li>
 
@@ -65,8 +69,6 @@
             <strong></strong>
         </a>
         <ul class="dropdown-menu text-small shadow">
-            <!--                <li><a class="dropdown-item" href="#" th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}">Создать-->
-            <!--                    новый календарь</a></li>-->
             <li><a class="dropdown-item" href="#">Настройки</a></li>
             <li><a class="dropdown-item" href="#">Профиль</a></li>
             <li>
@@ -80,27 +82,5 @@
         </ul>
     </div>
 </div>
-<!--<script>-->
-<!--    // JavaScript to toggle the sidebar-->
-<!--    const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');-->
-<!--    const sidebar = document.querySelector('.sidebar');-->
-
-<!--    sidebarToggleBtn.addEventListener('click', () => {-->
-<!--        sidebar.classList.toggle('active');-->
-<!--    });-->
-<!--</script>-->
-<!--<script>-->
-<!--    const menuItems = document.querySelectorAll('.sidebar li a');-->
-
-<!--    menuItems.forEach(item => {-->
-<!--        item.addEventListener('click', () => {-->
-<!--            // Удаляем класс 'active' у всех элементов меню-->
-<!--            menuItems.forEach(item => item.classList.remove('active'));-->
-
-<!--            // Добавляем класс 'active' к выбранному элементу меню-->
-<!--            item.classList.add('active');-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
 </body>
 </html>
