@@ -11,4 +11,5 @@ public interface Cash_flowsRepository extends JpaRepository<Cash_flows, Integer>
     List<Cash_flows> findAllByCalId(Integer id);
 
     List<Cash_flows> findAllByCalIdAndFlowType1(Integer id, boolean type);
+    List<Cash_flows> findAllByCalIdAndFlowType1AndFlowType2(Integer id, boolean type1, boolean type2);
 }

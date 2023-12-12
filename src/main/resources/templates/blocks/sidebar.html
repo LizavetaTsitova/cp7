@@ -13,13 +13,14 @@
         <li>
             <a href="#" class="nav-link link-body-emphasis" style="color: black; text-decoration: none;"
                th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}"
-               onclick="openPopupForm()">
+               onclick="openPopupForm('popupForm')">
                 Создать новый календарь
             </a>
         </li>
         <li>
             <a href="#" class="nav-link link-body-emphasis" style="color: black; text-decoration: none;"
-               th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}">
+               th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}"
+               onclick="openPopupForm('popupCateg')">
                 Категории
             </a>
         </li>
@@ -27,29 +28,36 @@
             <a href="#" class="nav-link link-body-emphasis" style="color: black; text-decoration: none;"
                th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}
                  and ${#temporals.format(#temporals.createNow(), 'yyyy-MM') > #temporals.format(date, 'yyyy-MM')}
-                    and (${totalFactAmount_inc == 0.0} or ${totalFactAmount_dec == 0.0})">
+                    and (${totalFactAmount_inc == 0.0} or ${totalFactAmount_dec == 0.0})"
+               onclick="openPopupForm('popupFormInsertLastMonth')">
                 Заполнить платёжный календарь
             </a>
         </li>
         <li>
-            <button class="nav-link link-body-emphasis" onclick="handleButton1Click()"
-                    style="color: black; text-decoration: none;"
-                    th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')')}
-                    and ${#temporals.format(#temporals.createNow(), 'yyyy-MM') < #temporals.format(date, 'yyyy-MM')}
-                    and (${totalFactAmount_inc == 0.0} or ${totalFactAmount_dec == 0.0})">
-                <!--                <svg class="bi pe-none me-2" width="16" height="16">-->
+            <button class="nav-link link-body-emphasis"
+                    th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')')}"
+                    th:classappend="${#temporals.format(#temporals.createNow(), 'yyyy-MM').equals(#temporals.format(date, 'yyyy-MM'))
+        and (totalFactAmount_inc == 0.0 or totalFactAmount_dec == 0.0) and totalPlanAmount_inc == 0.0 ? 'abled-button' : 'disabled-button'}"
+                    th:disabled="${#temporals.format(#temporals.createNow(), 'yyyy-MM').equals(#temporals.format(date, 'yyyy-MM'))
+        and (totalFactAmount_inc == 0.0 or totalFactAmount_dec == 0.0) and totalPlanAmount_inc == 0.0} ? 'false':'true'"
+                    onclick="openPopupForm('popupFormIncome')">
                 Внести данные по доходам
             </button>
         </li>
         <li>
-            <button class="nav-link link-body-emphasis" onclick="handleButton2Click()"
-                    style="color: black; text-decoration: none;"
-                    th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')')}
-                    and ${#temporals.format(#temporals.createNow(), 'yyyy-MM') < #temporals.format(date, 'yyyy-MM')}
-                    and (${totalFactAmount_inc == 0.0} or ${totalFactAmount_dec == 0.0})">
+            <button class="nav-link link-body-emphasis"
+                    th:if="${#authorization.expression('hasRole(''ROLE_INFORMER'')')}"
+                    th:classappend="${#temporals.format(#temporals.createNow(), 'yyyy-MM').equals(#temporals.format(date, 'yyyy-MM'))
+        and (totalFactAmount_inc == 0.0 or totalFactAmount_dec == 0.0) and totalPlanAmount_inc > 0.0 ? 'abled-button' : 'disabled-button'}"
+                    th:disabled="${#temporals.format(#temporals.createNow(), 'yyyy-MM').equals(#temporals.format(date, 'yyyy-MM'))
+        and (totalFactAmount_inc == 0.0 or totalFactAmount_dec == 0.0) and totalPlanAmount_inc > 0.0} ? 'false':'true'"
+                    onclick="openPopupForm('popupFormDec')">
                 Внести данные по расходам
             </button>
         </li>
+
+
+
 
     </ul>
     <ul class="nav nav-pills flex-column mb-auto" th:if="${request.requestURI.endsWith('/dashboards')}">

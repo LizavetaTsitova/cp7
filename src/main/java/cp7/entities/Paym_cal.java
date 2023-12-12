@@ -15,7 +15,8 @@ import java.sql.Date;
 public class Paym_cal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer cal_id;
+    @Column(name = "cal_id")
+    private Integer calId;
 
     @Column(name = "start_date")
     private Date startDate;

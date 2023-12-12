@@ -9,4 +9,6 @@ import java.util.Date;
 
 public interface PCRepository extends JpaRepository<Paym_cal, Integer> {
     Paym_cal findByEndDateAndIdCompany(Date end, Integer id);
+
+    Paym_cal findByCalId(Integer id);
 }

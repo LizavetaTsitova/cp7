@@ -15,7 +15,8 @@
                                         th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}">Дашборды</a>
                 </li>
                 <li class="nav-item"><a href="#" class="nav-link px-2 link-body-emphasis"
-                                        style="color: white; text-decoration: none">Платежи</a></li>
+                                        style="color: white; text-decoration: none"
+                                        th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}">Платежи</a></li>
             </ul>
         </div>
     </div>

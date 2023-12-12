@@ -19,7 +19,8 @@ public class Cash_flows {
 
     @Column(name = "flow_type_1")
     private Boolean flowType1;
-    private Boolean flow_type_2;
+    @Column(name = "flow_type_2")
+    private Boolean flowType2;
     @Column(name = "cal_id")
     private Integer calId;
     private Date paym_date;
