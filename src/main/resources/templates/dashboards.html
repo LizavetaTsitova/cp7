@@ -13,11 +13,204 @@
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.3/dist/chartjs-plugin-datalabels.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="../static/styles/style.css">
 </head>
-<body>
+<body style="background-color: #F1F0FA">
 <header th:insert="~{blocks/header :: header}"></header>
-<div th:include="blocks/sidebar.html"></div>
+<!--<div th:include="blocks/sidebar.html"></div>-->
+<div class="chart-container" style="padding: 20px;">
+    <div class="chart-box">
+        <h3>График 1</h3>
+        <canvas id="Chart1"></canvas>
+        <button class="btn btn-primary">Сохранить</button>
+    </div>
+    <div class="chart-box">
+        <h3>График 2</h3>
+        <canvas id="Chart2"></canvas>
+        <button class="btn btn-primary">Сохранить</button>
+    </div>
+    <div class="chart-box">
+        <h3>График 3</h3>
+        <canvas id="Chart3"></canvas>
+        <button class="btn btn-primary">Сохранить</button>
+    </div>
+    <div class="chart-box">
+        <h3>График 4</h3>
+        <canvas id="Chart4"></canvas>
+        <button class="btn btn-primary">Сохранить</button>
+    </div>
+    <div class="chart-box">
+        <h3>График 5</h3>
+        <canvas id="Chart5"></canvas>
+        <button class="btn btn-primary">Сохранить</button>
+    </div>
+    <div class="chart-box">
+        <h3>График 6</h3>
+        <canvas id="Chart6"></canvas>
+        <button class="btn btn-primary">Сохранить</button>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const incPlanByMonth = [[${incPlanByMonth}]];
+    const incFactByMonth = [[${incFactByMonth}]];
+
+    const incLabels = Object.keys(incPlanByMonth);
+    const incPlanData = Object.values(incPlanByMonth);
+    const incFactData = incLabels.map(label => incFactByMonth[label] || 0);
+
+    const ctx1 = document.getElementById('Chart1').getContext('2d');
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: incLabels,
+            datasets: [{
+                label: 'Плановые доходы',
+                data: incPlanData,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)'
+            }, {
+                label: 'Фактические доходы',
+                data: incFactData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+<script th:inline="javascript">
+    const expPlanByMonth = [[${expPlanByMonth}]];
+    const expFactByMonth = [[${expFactByMonth}]];
+
+    const expLabels = Object.keys(expPlanByMonth);
+    const expPlanData = Object.values(expPlanByMonth);
+    const expFactData = incLabels.map(label => expFactByMonth[label] || 0);
+
+    const ctx2 = document.getElementById('Chart2').getContext('2d');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: expLabels,
+            datasets: [{
+                label: 'Плановые расходы',
+                data: expPlanData,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)'
+            }, {
+                label: 'Фактические расходы',
+                data: expFactData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+<script th:inline="javascript">
+    const labels = Object.keys(incFactByMonth);
+    const incomeData = labels.map(label => incFactByMonth[label] || 0);
+    const expenseData = labels.map(label => expFactByMonth[label] || 0);
+
+    const ctxRatio = document.getElementById('Chart3').getContext('2d');
+    new Chart(ctxRatio, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Фактические доходы',
+                data: incomeData,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                fill: false
+            }, {
+                label: 'Фактические расходы',
+                data: expenseData,
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const categoriesIncome = /*[[${categoriesIncome}]]*/ {};
+
+    const categoryLabels = Object.keys(categoriesIncome); // Или categoriesExpense, в зависимости от того, какие данные вы хотите отобразить
+    const categoryData = Object.values(categoriesIncome); // Или categoriesExpense
+
+    const backgroundColors = categoryLabels.map(() => getRandomColor());
+    const ctx = document.getElementById('Chart5').getContext('2d');
+    const categoryDoughnutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                label: 'Категории',
+                data: categoryData,
+                backgroundColor: backgroundColors,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+
+        }
+    });
+    /*]]>*/
+
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const categoriesExpense = /*[[${categoriesExpense}]]*/ {};
+
+    const categoryLabelsExp = Object.keys(categoriesExpense); // Или categoriesExpense, в зависимости от того, какие данные вы хотите отобразить
+    const categoryDataExp = Object.values(categoriesExpense); // Или categoriesExpense
+    const total = categoryDataExp.reduce((acc, val) => acc + val, 0);
+
+
+    const ctx6 = document.getElementById('Chart6').getContext('2d');
+    const categoryDoughnut = new Chart(ctx6, {
+        type: 'doughnut',
+        data: {
+            labels: categoryLabelsExp,
+            datasets: [{
+                label: 'Категории',
+                data: categoryDataExp,
+                backgroundColor: backgroundColors,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+        }
+    });
+    /*]]>*/
+</script>
 </body>
 </html>

@@ -83,7 +83,7 @@
 }
 
 .sidebar {
-    height: 100vh;
+    height: 1165px;
     width: 190px;
     margin-right: 30px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -179,4 +179,32 @@
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный цвет */
     z-index: 9998; /* Убедитесь, что оверлей находится под всплывающим окном */
+}
+
+.chart-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px; /* Добавляет пространство между графиками */
+}
+.chart-box {
+    flex: 0 0 48%; /* Размер каждого блока с графиком */
+    box-sizing: border-box;
+    border: 1px solid #ddd; /* Линия разделения */
+    padding: 10px; /* Отступы внутри блока с графиком */
+    background-color: #f9f9f9; /* Фоновый цвет блока с графиком */
+}
+canvas {
+    width: 100%;
+    height: auto;
+}
+
+.save-button {
+    margin-top: 10px; /* Отступ сверху для кнопки */
+    padding: 5px 10px; /* Паддинг для кнопки */
+    background-color: #4CAF50; /* Цвет фона кнопки */
+    color: white; /* Цвет текста кнопки */
+    border: none; /* Убрать стандартные границы кнопки */
+    border-radius: 4px; /* Скругление углов кнопки */
+    cursor: pointer; /* Стиль курсора при наведении */
 }

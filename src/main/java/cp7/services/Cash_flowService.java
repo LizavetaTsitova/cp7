@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -67,7 +68,7 @@ public class Cash_flowService {
 
         Cell categoryCell = row.getCell(0); // Категория находится в первой колонке
         String categoryName = categoryCell.getStringCellValue();
-        Integer categoryId = (categoryRepository.findByCompanyIdAndName(id_comp, categoryName)).getCategory_id();
+        Integer categoryId = (categoryRepository.findByCompanyIdAndName(id_comp, categoryName)).getCategoryId();
         cashFlows.setCategoryId(categoryId);
 
         Cell dateCell = row.getCell(1); // Дата находится во второй колонке
@@ -107,12 +108,12 @@ public class Cash_flowService {
         return true;
     }
 
-    public void addPlanInc(IncomeFormData data, Integer paycalID){
-        List <Integer> categoriesID = data.getCategoryId();
-        List <LocalDate> dates = data.getPaymentDate();
-        List <Float> amounts = data.getAmount();
+    public void addPlanInc(IncomeFormData data, Integer paycalID) {
+        List<Integer> categoriesID = data.getCategoryId();
+        List<LocalDate> dates = data.getPaymentDate();
+        List<Float> amounts = data.getAmount();
 
-        for(int i = 0; i < categoriesID.size(); i++){
+        for (int i = 0; i < categoriesID.size(); i++) {
             Cash_flows cash_flow = new Cash_flows();
             cash_flow.setFlowType1(false);
             cash_flow.setFlowType2(false);
@@ -126,11 +127,11 @@ public class Cash_flowService {
     }
 
     public void addPlanExp(IncomeFormData data, Integer paycalID) {
-        List <Integer> categoriesID = data.getCategoryId();
-        List <LocalDate> dates = data.getPaymentDate();
-        List <Float> amounts = data.getAmount();
+        List<Integer> categoriesID = data.getCategoryId();
+        List<LocalDate> dates = data.getPaymentDate();
+        List<Float> amounts = data.getAmount();
 
-        for(int i = 0; i < categoriesID.size(); i++){
+        for (int i = 0; i < categoriesID.size(); i++) {
             Cash_flows cash_flow = new Cash_flows();
             cash_flow.setFlowType1(true);
             cash_flow.setFlowType2(false);
@@ -140,12 +141,17 @@ public class Cash_flowService {
             cash_flow.setCategoryId(categoriesID.get(i));
 
             cash_flowsRepository.save(cash_flow);
+            distributeExpenses(paycalID, categoriesID.get(i), cash_flow);
         }
 
-        distributeExpenses(paycalID);
+        // Проверка итогового сальдо
+        Map<LocalDate, List<Double>> incomeMap = loadPlan(paycalID, false);
+        Map<LocalDate, List<Double>> expenseMap = loadPlan(paycalID, true);
+
+        checkBalances(incomeMap, expenseMap);
     }
 
-    private void distributeExpenses(Integer paycalID) {
+    private void distributeExpenses(Integer paycalID, Integer catID, Cash_flows cash_flow) {
         // Загрузка данных о плановых доходах и расходах
         Map<LocalDate, List<Double>> incomeMap = loadPlan(paycalID, false);
         Map<LocalDate, List<Double>> expenseMap = loadPlan(paycalID, true);
@@ -154,26 +160,28 @@ public class Cash_flowService {
         for (Map.Entry<LocalDate, List<Double>> entry : expenseMap.entrySet()) {
             LocalDate date = entry.getKey();
             List<Double> expensesList = entry.getValue();
+            Double expense = 0.0;
 
             for (double expenses : expensesList) {
-                double totalIncomeForDate = incomeMap.getOrDefault(date, Collections.singletonList(0.0)).stream().mapToDouble(Double::doubleValue).sum();
-                if (totalIncomeForDate - expenses < 0) {
-                    // Перенос расходов на другие дни
-                    adjustExpenses(expenseMap, incomeMap, date, expenses - totalIncomeForDate);
-                }
+                expense = expense + expenses;
             }
-        }
-        // Проверка итогового сальдо
-        checkBalances(incomeMap, expenseMap);
-    }
 
+            double totalIncomeForDate = incomeMap.getOrDefault(date, Collections.singletonList(0.0)).stream().mapToDouble(Double::doubleValue).sum();
+            if (totalIncomeForDate - expense < 0) {
+                // Перенос расходов на другие дни
+                adjustExpenses(expenseMap, incomeMap, date, expense - totalIncomeForDate, paycalID, catID, cash_flow);
+            }
+
+        }
+
+    }
 
     // Метод для загрузки плановых доходов/расходов
     private Map<LocalDate, List<Double>> loadPlan(Integer paycalID, Boolean type) {
         List<Cash_flows> cash_flows = cash_flowsRepository.findAllByCalIdAndFlowType1AndFlowType2(paycalID, type, false);
 
         Map<LocalDate, List<Double>> planMap = new HashMap<>();
-        for(Cash_flows cash_flow: cash_flows) {
+        for (Cash_flows cash_flow : cash_flows) {
             LocalDate date = cash_flow.getPaym_date().toLocalDate(); // Преобразование в LocalDate
             double amount = cash_flow.getAmount().doubleValue(); // Преобразование в Double
 
@@ -185,21 +193,37 @@ public class Cash_flowService {
     }
 
     // Метод для переноса расходов на другие дни
-    private void adjustExpenses(Map<LocalDate, List<Double>> expenseMap, Map<LocalDate, List<Double>> incomeMap, LocalDate negativeBalanceDate, double deficit) {
-        // Перебор дат, начиная со следующего дня после negativeBalanceDate
+    private void adjustExpenses(Map<LocalDate, List<Double>> expenseMap, Map<LocalDate, List<Double>> incomeMap, LocalDate negativeBalanceDate, double deficit, Integer paycalID, Integer categID, Cash_flows cash_flow) {
+        // Перебор дат
         for (LocalDate date : incomeMap.keySet()) {
-            if (date.isAfter(negativeBalanceDate)) {
+            if (!date.equals(negativeBalanceDate)) {
                 double totalIncomeForDate = incomeMap.getOrDefault(date, Collections.singletonList(0.0)).stream().mapToDouble(Double::doubleValue).sum();
                 double totalExpensesForDate = expenseMap.getOrDefault(date, Collections.singletonList(0.0)).stream().mapToDouble(Double::doubleValue).sum();
 
                 double available = totalIncomeForDate - totalExpensesForDate;
 
                 if (available >= deficit) {
+                    if(expenseMap.get(date) == null){
+                        // Если записи нет, создаем новую с начальным значением 0.0
+                        expenseMap.put(date, new ArrayList<>(Arrays.asList(0.0)));
+                    }
                     // Достаточно средств для покрытия дефицита, перераспределяем расходы
-                    expenseMap.get(date).add(deficit); // Добавляем дефицит к расходам этой даты
-                    expenseMap.get(negativeBalanceDate).remove(deficit); // Удаляем дефицит из исходной даты
 
-                    log.info("Расходы в размере " + deficit + " перенесены с " + negativeBalanceDate + " на " + date);
+                    expenseMap.get(date).add(deficit); // Добавляем дефицит к расходам этой даты
+                    Cash_flows cash_flows_diff = new Cash_flows();
+                    cash_flows_diff.setFlowType1(true);
+                    cash_flows_diff.setFlowType2(false);
+                    cash_flows_diff.setCalId(paycalID);
+                    cash_flows_diff.setPaym_date(Date.valueOf(date));
+                    cash_flows_diff.setAmount((float) deficit);
+                    cash_flows_diff.setCategoryId(categID);
+                    cash_flowsRepository.save(cash_flows_diff);
+
+                    expenseMap.get(negativeBalanceDate).remove(deficit); // Удаляем дефицит из исходной даты
+                    cash_flow.setAmount((float) (cash_flow.getAmount() - deficit));
+                    cash_flowsRepository.save(cash_flow);
+
+                    System.out.println("Расходы в размере " + deficit + " перенесены с " + negativeBalanceDate + " на " + date);
                     break; // Выходим из цикла после успешного переноса
                 }
             }
@@ -218,6 +242,31 @@ public class Cash_flowService {
             }
         }
     }
+
+    // Агрегация данных по месяцам
+    public Map<String, Float> aggregateDataByMonth(List<Cash_flows> cashFlows) {
+        Map<String, Float> monthlyData = new HashMap<>();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM");
+
+        for (Cash_flows flow : cashFlows) {
+            if (flow.getPaym_date() != null) {
+                String month = formatter.format(flow.getPaym_date());
+                monthlyData.put(month, monthlyData.getOrDefault(month, 0f) + flow.getAmount());
+            }
+        }
+        return monthlyData;
+    }
+
+    public Map<String, Float> aggregateDataByCategory(List<Cash_flows> cashFlows) {
+        Map<String, Float> categoryTotals = new HashMap<>();
+
+        for (Cash_flows flow : cashFlows) {
+            String categoryName = categoryRepository.findByCategoryId(flow.getCategoryId()).getName(); // Предположим, что у Cash_flows есть метод getCategory(), который возвращает объект Categories, и у Categories есть метод getName()
+            categoryTotals.put(categoryName, categoryTotals.getOrDefault(categoryName, 0f) + flow.getAmount());
+        }
+        return categoryTotals;
+    }
+
 
 }
 

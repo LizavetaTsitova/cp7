@@ -13,10 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -146,13 +143,13 @@ public class PCController {
 
         // Инициализируем суммы для каждой категории в нулевое значение
         for (Categories category : categories_inc) {
-            planAmounts_inc.put(category.getCategory_id(), 0.0);
-            factAmounts_inc.put(category.getCategory_id(), 0.0);
+            planAmounts_inc.put(category.getCategoryId(), 0.0);
+            factAmounts_inc.put(category.getCategoryId(), 0.0);
         }
 
         for (Categories category : categories_dec) {
-            planAmounts_dec.put(category.getCategory_id(), 0.0);
-            factAmounts_dec.put(category.getCategory_id(), 0.0);
+            planAmounts_dec.put(category.getCategoryId(), 0.0);
+            factAmounts_dec.put(category.getCategoryId(), 0.0);
         }
 
         // Вычисляем суммы плановых и фактических доходов для каждой категории
@@ -195,7 +192,7 @@ public class PCController {
             Map<Integer, Float> plannedPayments = new HashMap<>();
 
             for (Cash_flows cashFlow : cash_flows_inc) {
-                if (cashFlow.getCategoryId().equals(category.getCategory_id()) && cashFlow.getPaym_date() != null) {
+                if (cashFlow.getCategoryId().equals(category.getCategoryId()) && cashFlow.getPaym_date() != null) {
                     LocalDate datee = cashFlow.getPaym_date().toLocalDate();
                     int day = datee.getDayOfMonth();
 
@@ -209,8 +206,8 @@ public class PCController {
                 }
             }
 
-            paymentByDay_inc.put(category.getCategory_id(), factPayments);
-            paymentByDay_inc_plan.put(category.getCategory_id(), plannedPayments);
+            paymentByDay_inc.put(category.getCategoryId(), factPayments);
+            paymentByDay_inc_plan.put(category.getCategoryId(), plannedPayments);
         }
 
         for (Categories category : categories_dec) {
@@ -218,7 +215,7 @@ public class PCController {
             Map<Integer, Float> plannedPayments = new HashMap<>();
 
             for (Cash_flows cashFlow : cash_flows_dec) {
-                if (cashFlow.getCategoryId().equals(category.getCategory_id()) && cashFlow.getPaym_date() != null) {
+                if (cashFlow.getCategoryId().equals(category.getCategoryId()) && cashFlow.getPaym_date() != null) {
                     LocalDate datee = cashFlow.getPaym_date().toLocalDate();
                     int day = datee.getDayOfMonth();
 
@@ -232,8 +229,8 @@ public class PCController {
                 }
             }
 
-            paymentByDay_dec.put(category.getCategory_id(), factPayments);
-            paymentByDay_dec_plan.put(category.getCategory_id(), plannedPayments);
+            paymentByDay_dec.put(category.getCategoryId(), factPayments);
+            paymentByDay_dec_plan.put(category.getCategoryId(), plannedPayments);
         }
 
         List<Integer> weekend = new ArrayList<>();
@@ -382,6 +379,13 @@ public class PCController {
     @PostMapping("/add_dec")
     public String addDec(@ModelAttribute IncomeFormData formData) {
         cash_flowService.addPlanExp(formData, payCalId);
+        return "redirect:/pc";
+    }
+
+    @PostMapping("/edit_flow")
+    public String editFlow(@RequestBody Cash_flows cash_flows){
+
+        System.out.println("d");
         return "redirect:/pc";
     }
 }

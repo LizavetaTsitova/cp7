@@ -47,8 +47,7 @@
             <h4 style="margin-top: 10px">Ответственный: <span th:text="${owner}"></span></h4>
             <hr>
 
-            <div style="background-color: white; padding: 10px; margin: -10px; margin-bottom: 25px; margin-top: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); overflow-x: auto; max-width: 90%;">
-                <h2>Таблица доходов</h2>
+            <div style="background-color: white; padding: 10px; margin: -10px; margin-bottom: 25px; margin-top: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); overflow-x: auto; max-width: 1270px;">                <h2>Таблица доходов</h2>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
@@ -66,16 +65,16 @@
                     <tr th:each="category, index : ${categories_inc}">
                         <td th:text="${index.index + 1}"></td>
                         <td th:text="${category.name}"></td>
-                        <td th:text="${planAmounts_inc[category.category_id]}"></td>
-                        <td th:text="${factAmounts_inc[category.category_id]}"></td>
-                        <td th:text="${planAmounts_inc[category.category_id] - factAmounts_inc[category.category_id]}"></td>
+                        <td th:text="${planAmounts_inc[category.categoryId]}"></td>
+                        <td th:text="${factAmounts_inc[category.categoryId]}"></td>
+                        <td th:text="${planAmounts_inc[category.categoryId] - factAmounts_inc[category.categoryId]}"></td>
                         <td th:each="day : ${#numbers.sequence(1, days)}">
-                            <span th:if="${paymentByDay_inc[category.category_id]?.get(day) != null}"
+                            <span th:if="${paymentByDay_inc[category.categoryId]?.get(day) != null}"
                                   class="actual-payment editable-cell"
-                                  th:text="${paymentByDay_inc[category.category_id].get(day)}"></span>
-                            <span th:unless="${paymentByDay_inc[category.category_id]?.get(day) != null}"
+                                  th:text="${paymentByDay_inc[category.categoryId].get(day)}"></span>
+                            <span th:unless="${paymentByDay_inc[category.categoryId]?.get(day) != null}"
                                   class="planned-payment editable-cell"
-                                  th:text="${paymentByDay_inc_plan[category.category_id].get(day)}"></span></span>
+                                  th:text="${paymentByDay_inc_plan[category.categoryId].get(day)}"></span></span>
                         </td>
                     </tr>
                     </tbody>
@@ -95,7 +94,7 @@
 
             <hr>
 
-            <div style="background-color: white; padding: 10px; margin: -10px; margin-top: 25px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); overflow-x: auto;  max-width: 90%;">
+            <div style="background-color: white; padding: 10px; margin: -10px; margin-top: 25px; margin-bottom: 30px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); overflow-x: auto;  max-width: 1270px;">
                 <h2>Таблица расходов</h2>
 
                 <table class="table table-bordered">
@@ -116,16 +115,16 @@
                         <td th:text="${index.index + 1}"></td>
                         <!-- Заполняем колонку "N" по номеру каждой категории по счету -->
                         <td th:text="${category.name}"></td> <!-- Выводим данные из переменной category_inc -->
-                        <td th:text="${planAmounts_dec[category.category_id]}"></td>
-                        <td th:text="${factAmounts_dec[category.category_id]}"></td>
-                        <td th:text="${planAmounts_dec[category.category_id] - factAmounts_dec[category.category_id]}"></td>
+                        <td th:text="${planAmounts_dec[category.categoryId]}"></td>
+                        <td th:text="${factAmounts_dec[category.categoryId]}"></td>
+                        <td th:text="${planAmounts_dec[category.categoryId] - factAmounts_dec[category.categoryId]}"></td>
                         <td th:each="day : ${#numbers.sequence(1, days)}">
-                            <span th:if="${paymentByDay_dec[category.category_id]?.get(day) != null}"
+                            <span th:if="${paymentByDay_dec[category.categoryId]?.get(day) != null}"
                                   class="actual-payment editable-cell"
-                                  th:text="${paymentByDay_dec[category.category_id].get(day)}"></span>
-                            <span th:unless="${paymentByDay_dec[category.category_id]?.get(day) != null}"
+                                  th:text="${paymentByDay_dec[category.categoryId].get(day)}"></span>
+                            <span th:unless="${paymentByDay_dec[category.categoryId]?.get(day) != null}"
                                   class="planned-payment editable-cell"
-                                  th:text="${paymentByDay_dec_plan[category.category_id].get(day)}"></span></span>
+                                  th:text="${paymentByDay_dec_plan[category.categoryId].get(day)}"></span></span>
                         </td>
                     </tr>
                     </tbody>
@@ -152,15 +151,16 @@
     <div class="popup-content">
         <span class="close" onclick="closePopupForm(this)">&times;</span>
         <h3>Заполните форму для создания нового платёжного календаря</h3>
+        <hr>
         <form th:action="@{/add_pc}">
             <!-- Поля для заполнения -->
-            <label for="owner">Кто отвечает за платёжный календарь</label>
-            <select class="form-select" id="owner" name="owner">
+            <label for="owner">Кто отвечает за платёжный календарь:</label>
+            <select class="form-select" id="owner" name="owner" style="margin-bottom: 10px">
                 <option th:each="userInf : ${usersInfs}" th:value="${userInf.userId}"
                         th:text="${userInf.first_name + ' ' + userInf.last_name}"></option>
             </select>
 
-            <label for="month">Какому месяцу соответствует платёжный календарь?</label>
+            <label for="month" style="margin-right: 5px">Какому месяцу соответствует платёжный календарь?</label>
             <input type="month" id="month" name="month" class="date">
 
             <button class="btn btn-primary" type="submit">Отправить</button>
@@ -206,7 +206,7 @@
                     <div class="input-group">
                         <label for="category_inc" style="margin-right: 3px">Выберите категорию:</label>
                         <select id="category_inc" name="categoryId" required>
-                            <option th:each="category : ${categories_inc}" th:value="${category.category_id}"
+                            <option th:each="category : ${categories_inc}" th:value="${category.categoryId}"
                                     th:text="${category.name}"></option>
                         </select>
                     </div>
@@ -240,7 +240,7 @@
                     <div class="input-group">
                         <label for="category_exp" style="margin-right: 3px">Выберите категорию:</label>
                         <select id="category_exp" name="categoryId" required>
-                            <option th:each="category : ${categories_dec}" th:value="${category.category_id}"
+                            <option th:each="category : ${categories_dec}" th:value="${category.categoryId}"
                                     th:text="${category.name}"></option>
                         </select>
                     </div>
@@ -261,28 +261,47 @@
     </div>
 </div>
 <div id="popupCateg" class="popup-form">
+    <span class="close" onclick="closePopupForm(this)">&times;</span>
     <div class="popup-content">
-        <span class="close" onclick="closePopupForm(this)">&times;</span>
-        <div id="categoryList">
-            <h3>Категории доходов</h3>
-            <ul id="categoryIncList" class="category-list">
-                <th:block th:each="category : ${categories_inc}">
-                    <li class="category-item" th:data-value="${category.category_id}" th:text="${category.name}"></li>
-                </th:block>
-            </ul>
-            <hr>
-            <h3>Категории расходов</h3>
-            <ul id="categoryExpList" class="category-list">
-                <th:block th:each="category : ${categories_dec}">
-                    <li class="category-item" th:data-value="${category.category_id}" th:text="${category.name}"></li>
-                </th:block>
-            </ul>
-            <input type="hidden" id="selectedCategoryId" name="categoryId" required>
-            <button class="btn btn-primary" style="margin-top: 10px" th:action="@{/add_category}">Добавить категорию</button>
-            <button class="btn btn-primary" th:action="@{/delete_category}">Удалить категорию</button>
+        <form th:action="@{/delete_category}" method="post">
+            <div id="categoryList">
+                <h3>Категории доходов</h3>
+                <ul id="categoryIncList" class="category-list">
+                    <th:block th:each="category : ${categories_inc}">
+                        <li class="category-item" onclick="selectCategory(this)" th:data-value="${category.categoryId}" th:text="${category.name}"></li>
+                    </th:block>
+                </ul>
+                <hr>
+                <h3>Категории расходов</h3>
+                <ul id="categoryExpList" class="category-list">
+                    <th:block th:each="category : ${categories_dec}">
+                        <li class="category-item" onclick="selectCategory(this)" th:data-value="${category.categoryId}" th:text="${category.name}"></li>
+                    </th:block>
+                </ul>
+                <input type="hidden" id="selectedCategoryId" name="categoryID" required>
+                <button type="submit" class="btn btn-primary">Удалить категорию</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="popupAddCateg" class="popup-form">
+    <span class="close" onclick="closePopupForm(this)">&times;</span>
+    <h3>Добавить новую категорию</h3>
+    <hr>
+    <form th:action="@{/add_category}" method="post">
+        <label for="type">Выберите тип категории:</label>
+        <select id="type" name="type" required>
+            <option value= '0'>Доходы</option>
+            <option value= '1'>Расходы</option>
+        </select>
+
+        <div style="margin-top: 10px">
+            <label for="categName" style="margin-right: 3px">Введите название категории:</label>
+            <input type="text" id="categName" name="name" required/>
         </div>
 
-    </div>
+        <button type="submit" class="btn btn-primary" style="margin-top: 10px" >Добавить категорию</button>
+    </form>
 </div>
 
 <script>
@@ -497,6 +516,12 @@
             }
         });
     });
+</script>
+<script>
+    function selectCategory(element) {
+        var categoryId = element.getAttribute('data-value');
+        document.getElementById('selectedCategoryId').value = categoryId;
+    }
 </script>
 
 </body>

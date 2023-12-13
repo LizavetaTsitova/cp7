@@ -15,6 +15,7 @@
                th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}"
                onclick="openPopupForm('popupForm')">
                 Создать новый календарь
+                <hr>
             </a>
         </li>
         <li>
@@ -22,6 +23,14 @@
                th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}"
                onclick="openPopupForm('popupCateg')">
                 Категории
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link link-body-emphasis" style="color: black; text-decoration: none;"
+               th:if="${#authorization.expression('hasRole(''ROLE_OWNER'')')}"
+               onclick="openPopupForm('popupAddCateg')">
+                Добавить категорию
+                <hr>
             </a>
         </li>
         <li>
@@ -55,30 +64,15 @@
                 Внести данные по расходам
             </button>
         </li>
-
-
-
-
     </ul>
-    <ul class="nav nav-pills flex-column mb-auto" th:if="${request.requestURI.endsWith('/dashboards')}">
-        <li>
-            <button class="nav-link link-body-emphasis" onclick="handleButton3Click()"
-                    style="color: black; text-decoration: none;">
-                Добавить дашборд
-            </button>
-        </li>
 
-    </ul>
     <hr>
     <div class="dropdown" style="color: black;">
         <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
            data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
             <strong></strong>
         </a>
         <ul class="dropdown-menu text-small shadow">
-            <li><a class="dropdown-item" href="#">Настройки</a></li>
-            <li><a class="dropdown-item" href="#">Профиль</a></li>
             <li>
                 <hr class="dropdown-divider">
             </li>
